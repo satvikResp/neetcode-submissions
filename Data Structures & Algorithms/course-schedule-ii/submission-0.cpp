@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int>indegree(numCourses,0);
+        vector<vector<int>>adj(numCourses);
+        for(auto it:prerequisites){
+            indegree[it[0]]++;
+            adj[it[1]].push_back(it[0]);
+        }
+        queue<int>q;
+        for(int i=0; i<numCourses; i++){
+            if(indegree[i] == 0){
+                q.push(i);
+            }
+        }
+
+        vector<int>topologicalorder;
+        while(!q.empty()){
+            int curr=q.front();
+            q.pop();
+            topologicalorder.push_back(curr);
+
+            for(auto it:adj[curr]){
+                indegree[it]--;
+                if(indegree[it]==0) q.push(it);
+            }
+        }
+        if(topologicalorder.size()==numCourses) return topologicalorder;
+        return {};
+    }
+    
+
+};
